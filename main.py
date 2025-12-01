@@ -25,7 +25,7 @@ except KeyError:
 
 # --- 1. CONFIGURATION AND INITIALIZATION ---
 
-# 設置 Streamlit 網頁標題與排版
+    # 設置 Streamlit 網頁標題與排版
 st.set_page_config(page_title="台股 AI 投資儀表板", layout="wide")
 st.title("📊 台股 AI 投資顧問")
 st.caption("輸入台股代號 (例如：2330, 0050) 進行分析與歷史走勢圖查看。")
