@@ -87,9 +87,8 @@ if st.button("📈 開始分析") and stock_code:
         st.subheader("🗓 近六個月股價走勢")
         
         # <<< 請新增這行，讓它顯示原始數據 >>>
-        st.dataframe(data) 
         
-        st.line_chart(data['Close'])
+       st.line_chart(data, y='Close')
 
 # 頁腳
 st.sidebar.markdown("---")
