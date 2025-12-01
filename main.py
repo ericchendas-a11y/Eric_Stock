@@ -67,7 +67,7 @@ if st.button("📈 開始分析") and stock_code:
         data = data.reset_index()
         
         if data.empty:
-# ... (後續的 AI 分析和繪圖程式碼)
+             # ... (後續的 AI 分析和繪圖程式碼)
         if data.empty:
             st.warning(f"⚠️ 無法取得 {stock_code_yf} 的歷史股價，請檢查代號是否正確。")
             st.stop()
