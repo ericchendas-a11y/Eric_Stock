@@ -60,8 +60,14 @@ if st.button("📈 開始分析") and stock_code:
     # 3. STOCK DATA RETRIEVAL (yfinance)
     try:
         # 下載近六個月的股價資料
+        # Fetch data for charting (last 6 months)
         data = yf.download(stock_code_yf, period="6mo", progress=False)
+
+        # <<< 請新增這行，將日期索引轉換為可讀的 'Date' 欄位 >>>
+        data = data.reset_index()
         
+        if data.empty:
+# ... (後續的 AI 分析和繪圖程式碼)
         if data.empty:
             st.warning(f"⚠️ 無法取得 {stock_code_yf} 的歷史股價，請檢查代號是否正確。")
             st.stop()
@@ -82,15 +88,12 @@ if st.button("📈 開始分析") and stock_code:
         st.error(f"分析時發生錯誤：請檢查代號是否正確。詳細錯誤: {e}")
         
 # ...
-    # 5. CHART DISPLAY
+    # 5. CHART DISPLAY (約在 Line 92 左右)
     if not data.empty:
-# 移除 st.dataframe(data) 這一行，因為它只是除錯用的，現在不需要了
-        
         st.subheader("🗓 近六個月股價走勢")
         
-        # <<< 替換為這個更明確的寫法 >>>
-        st.line_chart(data, y='Close')
-
+        # 這是最終正確的繪圖語法：指定 X 軸為 'Date'，Y 軸為 'Close'
+        st.line_chart(data, x='Date', y='Close')
 # 頁腳
 st.sidebar.markdown("---")
 st.sidebar.caption(f"部署於 Streamlit Cloud | 由 Gemini API 提供支援")
