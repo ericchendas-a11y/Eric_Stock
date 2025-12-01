@@ -21,6 +21,16 @@ SYSTEM_PROMPT = """你是一位專業、客觀且數據導向的「台股投資�
 """
 
 # 嘗試從 Streamlit Secrets 讀取密鑰並初始化 Gemini 客戶端
+# --- 讀取密鑰並初始化 Gemini 客戶端 (請從這裡開始替換，替換到 st.set_page_config 之前) ---
+
+# System Instruction (AI 的大腦/人設)
+SYSTEM_PROMPT = """你是一位專業、客觀且數據導向的「台股投資分析助理」。你的任務是協助使用者快速分析台灣上市櫃股票與 ETF。
+回答須精簡扼要，並固定以【📊 股票/ETF 名稱 (代號)】、【💰 核心數據觀察】、【📈 優勢與機會】、【⚠️ 風險與隱憂】、【💡 分析師短評】的結構輸出。
+請使用繁體中文。
+免責聲明：本分析僅供參考，不代表投資建議，投資前請審慎評估。
+"""
+
+# 嘗試從 Streamlit Secrets 讀取密鑰並初始化 Gemini 客戶端
 try:
     api_key = st.secrets["GEMINI_API_KEY"] 
     client = GenerativeModel('gemini-pro', system_instruction=SYSTEM_PROMPT)
@@ -34,44 +44,6 @@ except Exception as e:
 
 # --- 這裡程式碼必須是零縮排，靠最左邊 ---
 # st.set_page_config... (請確認這行和它後面的程式碼都沒有縮排)
-
-# ----------------------------------------------------
-# 以下程式碼必須是零縮排，靠左對齊！
-# ----------------------------------------------------
-
-st.set_page_config(page_title="台股 AI 投資儀表板", layout="wide") # <<< Line 29: 必須靠最左邊
-st.title("📊 台股 AI 投資顧問")                                 # 必須靠最左邊
-st.caption("輸入台股代號 (例如：2330, 0050) 進行分析與歷史走勢圖查看。") # 必須靠最左邊
-
-# ... (後續的 if st.button 判斷式也必須靠最左邊)
-
-# System Instruction (AI 的大腦/人設)
-SYSTEM_PROMPT = """你是一位專業、客觀且數據導向的「台股投資分析助理」。你的任務是協助使用者快速分析台灣上市櫃股票與 ETF。
-回答須精簡扼要，並固定以【📊 股票/ETF 名稱 (代號)】、【💰 核心數據觀察】、【📈 優勢與機會】、【⚠️ 風險與隱憂】、【💡 分析師短評】的結構輸出。
-請使用繁體中文。
-免責聲明：本分析僅供參考，不代表投資建議，投資前請審慎評估。
-"""
-
-# 嘗試從 Streamlit Secrets 讀取密鑰並初始化 Gemini 客戶端
-# --- 讀取密鑰並初始化 Gemini 客戶端 ---
-try: # <<< 這裡要有冒號 (:)
-    # Safely read the API Key from Streamlit Secrets (此行必須縮進)
-    api_key = st.secrets["GEMINI_API_KEY"] 
-    
-    # 使用我們上次修正成功的模型來初始化
-    client = GenerativeModel('gemini-pro', system_instruction=SYSTEM_PROMPT)
-
-    except KeyError: # <<< 這裡要有冒號 (:)
-    st.error("❌ 錯誤：找不到 Gemini API 密鑰。請檢查 Streamlit Cloud 的 Secrets 設定。")
-    st.stop() # 確保此行縮進
-    except Exception as e: # <<< 這裡要有冒號 (:)
-    st.error(f"❌ Gemini 初始化失敗，請檢查 API Key 或模型名稱: {e}")
-    st.stop() # 確保此行縮進
-# --- 區塊結束 ---
-    # 處理其他初始化錯誤
-    st.error(f"❌ Gemini 初始化失敗，請檢查 API Key 或模型名稱: {e}")
-    st.stop()
-
 
 # --- 2. 網頁介面與邏輯 ---
 
