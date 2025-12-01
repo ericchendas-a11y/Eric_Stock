@@ -20,7 +20,7 @@ try:
     # 使用我們上次修正成功的模型來初始化 (不需要前面的 genai.)
     client = GenerativeModel('gemini-pro', system_instruction=SYSTEM_PROMPT) # <<< 修正這裡
 
-except KeyError:
+    except KeyError:
 # ... (後續錯誤處理程式碼)
 
 # --- 1. CONFIGURATION AND INITIALIZATION ---
@@ -57,10 +57,10 @@ try: # <<< 這裡要有冒號 (:)
     # 使用我們上次修正成功的模型來初始化
     client = GenerativeModel('gemini-pro', system_instruction=SYSTEM_PROMPT)
 
-except KeyError: # <<< 這裡要有冒號 (:)
+    except KeyError: # <<< 這裡要有冒號 (:)
     st.error("❌ 錯誤：找不到 Gemini API 密鑰。請檢查 Streamlit Cloud 的 Secrets 設定。")
     st.stop() # 確保此行縮進
-except Exception as e: # <<< 這裡要有冒號 (:)
+    except Exception as e: # <<< 這裡要有冒號 (:)
     st.error(f"❌ Gemini 初始化失敗，請檢查 API Key 或模型名稱: {e}")
     st.stop() # 確保此行縮進
 # --- 區塊結束 ---
