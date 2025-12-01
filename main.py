@@ -88,10 +88,13 @@ if st.button("📈 開始分析") and stock_code:
         st.error(f"分析時發生錯誤：請檢查代號是否正確。詳細錯誤: {e}")
         
 # 5. CHART DISPLAY (約在 Line 92 左右)
-    if not data.empty:
+if not data.empty:
     st.subheader("🗓 近六個月股價走勢")
-    # 使用修正後的 x='Date' 和 y='Close'
-    st.line_chart(data, x='Date', y='Close')'，Y 軸為 'Close'
+    
+    # 請確保這行程式碼的結尾處，只有一個右括號和換行符號
+    st.line_chart(data, x='Date', y='Close') 
+    
+    # 刪除或註釋掉您之前用來除錯的 st.dataframe(data)
 
 # 頁腳
 st.sidebar.markdown("---")
