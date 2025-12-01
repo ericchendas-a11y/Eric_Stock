@@ -90,15 +90,11 @@ if st.button("📈 開始分析") and stock_code:
     except Exception as e:
         st.error(f"分析時發生錯誤：請檢查代號是否正確。詳細錯誤: {e}")
         
-# 5. CHART DISPLAY (約在 Line 92 左右)
-if not data.empty:
+# 5. CHART DISPLAY (約在 Line 91)
+# 修正後的安全檢查語法：確保 data 存在且不為空
+if data is not None and not data.empty:
     st.subheader("🗓 近六個月股價走勢")
-    
-    # 請確保這行程式碼的結尾處，只有一個右括號和換行符號
-    st.line_chart(data, x='Date', y='Close') 
-    
-    # 刪除或註釋掉您之前用來除錯的 st.dataframe(data)
-
+    st.line_chart(data, x='Date', y='Close')
 # 頁腳
 st.sidebar.markdown("---")
 st.sidebar.caption(f"部署於 Streamlit Cloud | 由 Gemini API 提供支援")
