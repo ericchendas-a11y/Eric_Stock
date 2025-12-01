@@ -9,7 +9,7 @@ import datetime
 # 設置 Streamlit 網頁標題與排版
 st.set_page_config(page_title="台股 AI 投資儀表板", layout="wide")
 # ... (中間省略部分程式碼)
-
+data = None
 # 嘗試從 Streamlit Secrets 讀取密鑰並初始化 Gemini 客戶端
 # --- 讀取密鑰並初始化 Gemini 客戶端 (請從這裡開始替換，替換到 st.set_page_config 之前) ---
 
