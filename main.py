@@ -89,7 +89,7 @@ if st.button("📈 開始分析") and stock_code:
         
 # 5. CHART DISPLAY (約在 Line 92 左右)
     if not data.empty:
-        st.subheader("🗓 近六個月股價走勢")
+    st.subheader("🗓 近六個月股價走勢")
     # 使用修正後的 x='Date' 和 y='Close'
     st.line_chart(data, x='Date', y='Close')'，Y 軸為 'Close'
         st.line_chart(data, x='Date', y='Close')
