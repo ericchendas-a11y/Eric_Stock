@@ -92,7 +92,7 @@ if st.button("📈 開始分析") and stock_code:
     st.subheader("🗓 近六個月股價走勢")
     # 使用修正後的 x='Date' 和 y='Close'
     st.line_chart(data, x='Date', y='Close')'，Y 軸為 'Close'
-        st.line_chart(data, x='Date', y='Close')
+
 # 頁腳
 st.sidebar.markdown("---")
 st.sidebar.caption(f"部署於 Streamlit Cloud | 由 Gemini API 提供支援")
