@@ -55,55 +55,18 @@ if st.button("📈 開始分析") and stock_code:
     
     # 3. STOCK DATA RETRIEVAL (yfinance)
     try:
-        # Fetch data for charting (last 1 year) - Changed from 6mo to 1y
-        data = yf.download(stock_code_yf, period="1y", progress=False)
+        # Fetch data for latest price (no need for 1y period for charts now)
+        data = yf.download(stock_code_yf, period="5d", progress=False)
 
         # 檢查數據是否為空
         if data.empty:
             st.warning(f"⚠️ 無法取得 {stock_code_yf} 的歷史股價，可能代號有誤或資料不完整。")
             st.stop()
-
-        # ----------------------------------------------------
-        # CHARTING AND STATS LOGIC (Re-added)
-        # ----------------------------------------------------
-        
-        # 確保 'Close' 是浮點數，用於計算
-        price_data = data['Close'].astype(float)
-        
-        # <<< 修正：將 Pandas Series 轉換為 NumPy array 或 list，以避免格式化錯誤 >>>
-        price_values = price_data.to_numpy() # 轉換為 NumPy array
-        
-        # 計算統計數據
-        max_price = round(price_values.max(), 2) 
-        min_price = round(price_values.min(), 2) 
-        avg_price = round(price_values.mean(), 2) 
-
-        st.markdown("---")
-        st.subheader("🗓 近一年股價走勢與統計")
-        
-        # 顯示統計 Metric
-        col_max, col_min, col_avg = st.columns(3)
-        col_max.metric("📈 最高價", f"{max_price:.2f} TWD")
-        col_min.metric("📉 最低價", f"{min_price:.2f} TWD")
-        col_avg.metric("💲 平均價", f"{avg_price:.2f} TWD")
-        
-        # 準備繪圖數據 (修正 KeyError: 'Date' 的最終方法)
-        data_for_chart = data.reset_index()
-        
-        # <<< 最終修正 KeyError 的關鍵：強制將第一個欄位（即日期）命名為 'Date' >>>
-        data_for_chart.columns.values[0] = 'Date' 
-        
-        # 繪製曲線圖
-        st.line_chart(data_for_chart, x='Date', y='Close', use_container_width=True)
-        st.markdown("---") # 分隔線
-        
-        # ----------------------------------------------------
         
         # 4. GEMINI ANALYSIS 
         with st.spinner(f"AI 顧問正在分析 {stock_code_yf} 並尋找競爭標的..."):
             
             # 傳遞給 Gemini 的提示詞 (修正 float 轉換問題)
-            # 這裡的 current_price 也必須確保是 float
             current_price = float(data['Close'].iloc[-1]) 
             prompt = f"請詳細分析台股代號 {stock_code_yf}。當前最新收盤價是 {current_price:.2f}。所有分析務必以此價格為唯一基準進行評估。請遵循我們設定好的格式，並執行比較任務。"
             
