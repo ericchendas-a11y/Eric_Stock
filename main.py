@@ -33,7 +33,7 @@ SYSTEM_PROMPT = """你是一位專業、客觀且數據導向的「台股投資�
 # 嘗試從 Streamlit Secrets 讀取密鑰並初始化 Gemini 客戶端
 try:
     api_key = st.secrets["GEMINI_API_KEY"] 
-    client = GenerativeModel('gemini-1.5-flash', system_instruction=SYSTEM_PROMPT)
+    client = GenerativeModel('gemini-2.5-flash', system_instruction=SYSTEM_PROMPT)
 
 except KeyError:
     st.error("❌ 錯誤：找不到 Gemini API 密鑰。請檢查 Streamlit Cloud 的 Secrets 設定。")
