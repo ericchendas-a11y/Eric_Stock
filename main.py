@@ -49,16 +49,21 @@ SYSTEM_PROMPT = """你是一位專業、客觀且數據導向的「台股投資�
 """
 
 # 嘗試從 Streamlit Secrets 讀取密鑰並初始化 Gemini 客戶端
-try:
-    # 這是讀取您在 Streamlit Cloud 裡設定的密鑰
+# --- 讀取密鑰並初始化 Gemini 客戶端 ---
+try: # <<< 這裡要有冒號 (:)
+    # Safely read the API Key from Streamlit Secrets (此行必須縮進)
     api_key = st.secrets["GEMINI_API_KEY"] 
-    # 使用我們上次修正成功的 gemini-pro 模型
-    client = genai.GenerativeModel('gemini-pro', system_instruction=SYSTEM_PROMPT)
-except KeyError:
-    # 提示使用者設定密鑰
+    
+    # 使用我們上次修正成功的模型來初始化
+    client = GenerativeModel('gemini-pro', system_instruction=SYSTEM_PROMPT)
+
+except KeyError: # <<< 這裡要有冒號 (:)
     st.error("❌ 錯誤：找不到 Gemini API 密鑰。請檢查 Streamlit Cloud 的 Secrets 設定。")
-    st.stop() # 停止執行，避免錯誤
-except Exception as e:
+    st.stop() # 確保此行縮進
+except Exception as e: # <<< 這裡要有冒號 (:)
+    st.error(f"❌ Gemini 初始化失敗，請檢查 API Key 或模型名稱: {e}")
+    st.stop() # 確保此行縮進
+# --- 區塊結束 ---
     # 處理其他初始化錯誤
     st.error(f"❌ Gemini 初始化失敗，請檢查 API Key 或模型名稱: {e}")
     st.stop()
