@@ -69,7 +69,7 @@ if st.button("📈 開始分析") and stock_code:
         # 4. GEMINI ANALYSIS 
         with st.spinner(f"AI 顧問正在分析 {stock_code_yf} ..."):
             # 傳遞給 Gemini 的提示詞
-            prompt = f"請詳細分析台股代號 {stock_code_yf} (收盤價: {data['Close'].iloc[-1]:.2f}) 目前的投資價值、風險與機會。請遵循我們設定好的格式。"
+            prompt = f"請詳細分析台股代號 {stock_code_yf} (收盤價: {float(data['Close'].iloc[-1]):.2f}) 目前的投資價值、風險與機會。請遵循我們設定好的格式。"
             
             # 發送請求
             response = client.generate_content(prompt)
