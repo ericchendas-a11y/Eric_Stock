@@ -87,10 +87,19 @@ if st.button("📈 開始分析") and stock_code:
         col_min.metric("📉 最低價", f"{min_price:.2f} TWD")
         col_avg.metric("💲 平均價", f"{avg_price:.2f} TWD")
         
-        # 準備繪圖數據 (將日期索引轉換為欄位，解決先前 KeyError)
+        # 準備繪圖數據 (修正 KeyError: 'Date' 的最終方法)
         data_for_chart = data.reset_index()
-        data_for_chart.rename(columns={'Date': 'Date'}, inplace=True) # 確保欄位名稱為 'Date'
-
+        
+        # 找出 reset_index 後生成的日期欄位名稱 (通常是 'index' 或 'Date')
+        # 然後將其強制改為 'Date'
+        
+        # 遍歷欄位並重命名第一個 Datetime/Timestamp 欄位為 'Date'
+        # 確保欄位名稱為 'Date' (這是最穩定的解決方案)
+        for col in data_for_chart.columns:
+            if data_for_chart[col].dtype == 'datetime64[ns]':
+                data_for_chart.rename(columns={col: 'Date'}, inplace=True)
+                break
+        
         # 繪製曲線圖
         st.line_chart(data_for_chart, x='Date', y='Close', use_container_width=True)
         st.markdown("---") # 分隔線
