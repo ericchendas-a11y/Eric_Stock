@@ -90,15 +90,8 @@ if st.button("📈 開始分析") and stock_code:
         # 準備繪圖數據 (修正 KeyError: 'Date' 的最終方法)
         data_for_chart = data.reset_index()
         
-        # 找出 reset_index 後生成的日期欄位名稱 (通常是 'index' 或 'Date')
-        # 然後將其強制改為 'Date'
-        
-        # 遍歷欄位並重命名第一個 Datetime/Timestamp 欄位為 'Date'
-        # 確保欄位名稱為 'Date' (這是最穩定的解決方案)
-        for col in data_for_chart.columns:
-            if data_for_chart[col].dtype == 'datetime64[ns]':
-                data_for_chart.rename(columns={col: 'Date'}, inplace=True)
-                break
+        # <<< 最終修正 KeyError 的關鍵：強制將第一個欄位（即日期）命名為 'Date' >>>
+        data_for_chart.columns.values[0] = 'Date' 
         
         # 繪製曲線圖
         st.line_chart(data_for_chart, x='Date', y='Close', use_container_width=True)
