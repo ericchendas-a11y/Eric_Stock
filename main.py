@@ -71,9 +71,9 @@ if st.button("📈 開始分析") and stock_code:
         price_data = data['Close'].astype(float)
         
         # 計算統計數據
-        max_price = price_data.max()
-        min_price = price_data.min()
-        avg_price = price_data.mean()
+        max_price = round(price_data.max(), 2) # <<< 修正：使用 round() 強制轉換為純 Python float
+        min_price = round(price_data.min(), 2) # <<< 修正：使用 round() 強制轉換為純 Python float
+        avg_price = round(price_data.mean(), 2) # <<< 修正：使用 round() 強制轉換為純 Python float
 
         st.markdown("---")
         st.subheader("🗓 近一年股價走勢與統計")
@@ -98,6 +98,7 @@ if st.button("📈 開始分析") and stock_code:
         with st.spinner(f"AI 顧問正在分析 {stock_code_yf} 並尋找競爭標的..."):
             
             # 傳遞給 Gemini 的提示詞 (修正 float 轉換問題)
+            # 這裡的 current_price 也必須確保是 float
             current_price = float(data['Close'].iloc[-1]) 
             prompt = f"請詳細分析台股代號 {stock_code_yf}。當前最新收盤價是 {current_price:.2f}。所有分析務必以此價格為唯一基準進行評估。請遵循我們設定好的格式，並執行比較任務。"
             
