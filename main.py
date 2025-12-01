@@ -62,11 +62,16 @@ if st.button("📈 開始分析") and stock_code:
         # 下載近六個月的股價資料
         # Fetch data for charting (last 6 months)
         data = yf.download(stock_code_yf, period="6mo", progress=False)
-
-        # <<< 請新增這行，將日期索引轉換為可讀的 'Date' 欄位 >>>
+        
+        # 1. 將日期索引轉換為欄位
         data = data.reset_index()
         
+        # <<< 2. 新增此行：強制將日期欄位名稱設為 'Date' (這是關鍵!) >>>
+        data.rename(columns={'index': 'Date'}, inplace=True)
+        data.rename(columns={'Date': 'Date'}, inplace=True) # 確保名稱是 'Date' 而不是 level_0
+        
         if data.empty:
+            # ...
             st.warning(f"⚠️ 無法取得 {stock_code_yf} 的歷史股價，請檢查代號是否正確。")
             st.stop()
             
