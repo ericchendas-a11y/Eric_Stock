@@ -84,11 +84,12 @@ if st.button("📈 開始分析") and stock_code:
 # ...
     # 5. CHART DISPLAY
     if not data.empty:
+# 移除 st.dataframe(data) 這一行，因為它只是除錯用的，現在不需要了
+        
         st.subheader("🗓 近六個月股價走勢")
         
-        # <<< 請新增這行，讓它顯示原始數據 >>>
-        
-       st.line_chart(data, y='Close')
+        # <<< 替換為這個更明確的寫法 >>>
+        st.line_chart(data, y='Close')
 
 # 頁腳
 st.sidebar.markdown("---")
