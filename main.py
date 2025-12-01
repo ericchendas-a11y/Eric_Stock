@@ -55,14 +55,45 @@ if st.button("📈 開始分析") and stock_code:
     
     # 3. STOCK DATA RETRIEVAL (yfinance)
     try:
-        # Fetch data for charting (last 6 months)
-        data = yf.download(stock_code_yf, period="6mo", progress=False)
+        # Fetch data for charting (last 1 year) - Changed from 6mo to 1y
+        data = yf.download(stock_code_yf, period="1y", progress=False)
 
         # 檢查數據是否為空
         if data.empty:
             st.warning(f"⚠️ 無法取得 {stock_code_yf} 的歷史股價，可能代號有誤或資料不完整。")
             st.stop()
-            
+
+        # ----------------------------------------------------
+        # CHARTING AND STATS LOGIC (Re-added)
+        # ----------------------------------------------------
+        
+        # 確保 'Close' 是浮點數，用於計算
+        price_data = data['Close'].astype(float)
+        
+        # 計算統計數據
+        max_price = price_data.max()
+        min_price = price_data.min()
+        avg_price = price_data.mean()
+
+        st.markdown("---")
+        st.subheader("🗓 近一年股價走勢與統計")
+        
+        # 顯示統計 Metric
+        col_max, col_min, col_avg = st.columns(3)
+        col_max.metric("📈 最高價", f"{max_price:.2f} TWD")
+        col_min.metric("📉 最低價", f"{min_price:.2f} TWD")
+        col_avg.metric("💲 平均價", f"{avg_price:.2f} TWD")
+        
+        # 準備繪圖數據 (將日期索引轉換為欄位，解決先前 KeyError)
+        data_for_chart = data.reset_index()
+        data_for_chart.rename(columns={'Date': 'Date'}, inplace=True) # 確保欄位名稱為 'Date'
+
+        # 繪製曲線圖
+        st.line_chart(data_for_chart, x='Date', y='Close', use_container_width=True)
+        st.markdown("---") # 分隔線
+        
+        # ----------------------------------------------------
+        
         # 4. GEMINI ANALYSIS 
         with st.spinner(f"AI 顧問正在分析 {stock_code_yf} 並尋找競爭標的..."):
             
