@@ -21,7 +21,7 @@ try:
     client = GenerativeModel('gemini-pro', system_instruction=SYSTEM_PROMPT) # <<< 修正這裡
 
 except KeyError:
-    # ... (後續錯誤處理程式碼)
+# ... (後續錯誤處理程式碼)
 
 # --- 1. CONFIGURATION AND INITIALIZATION ---
 
