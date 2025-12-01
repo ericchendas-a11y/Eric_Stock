@@ -82,7 +82,7 @@ if st.button("📈 開始分析") and stock_code:
         with st.spinner(f"AI 顧問正在分析 {stock_code_yf} ..."):
             # 傳遞給 Gemini 的提示詞
             # Prepare the prompt for Gemini
-            current_price = data['Close'].iloc[-1]
+            current_price = float(data['Close'].iloc[-1])
             prompt = f"請詳細分析台股代號 {stock_code_yf}。當前最新收盤價是 {current_price:.2f}。所有分析務必以此價格為唯一基準進行評估。請遵循我們設定好的格式。"
             
             # 發送請求
