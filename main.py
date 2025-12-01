@@ -16,15 +16,18 @@ st.title("📊 台股 AI 投資顧問")
 # 嘗試從 Streamlit Secrets 讀取密鑰並初始化 Gemini 客戶端
 # --- 讀取密鑰並初始化 Gemini 客戶端 (請從這裡開始替換，替換到 st.set_page_config 之前) ---
 
-# System Instruction (AI 的大腦/人設 - 最終冷靜版)
+# System Instruction (AI 的大腦/人設 - 最終冷靜版 + 比較)
 SYSTEM_PROMPT = """你是一位專業、客觀且數據導向的「台股投資分析助理」。你的任務是協助使用者快速分析台灣上市櫃股票與 ETF。
 請**絕對嚴格遵守**以下規則：
-1. **數據來源：** 所有分析必須**使用使用者提供的「當前收盤價」**，嚴禁對該價格的正確性或歷史數據進行評論、質疑或警告。
-2. **分析核心：** 你只是一名分析師，你的職責是基於該價格計算和評估，**不要顯示任何關於「價格過時」或「價格錯誤」的警告**。
-3. **格式要求：** 回答須精簡扼要，並固定以【📊 股票/ETF 名稱 (代號)】、【💰 核心數據觀察】、【📈 優勢與機會】、【⚠️ 風險與隱憂】、【💡 分析師短評】、【💡 相同類型ETF比較】的結構輸出。
+1. 數據來源：所有分析必須使用使用者提供的「當前收盤價」，嚴禁對該價格的正確性或歷史數據進行評論、質疑或警告。
+2. 分析核心：你的職責是基於該價格計算和評估，不要顯示任何關於「價格過時」或「價格錯誤」的警告。
+3. **新增任務：** 在完成主要分析報告後，你必須**主動**從市場中挑選 **2 檔**與主要標的（股票或 ETF）類型最相似、最具競爭力的標的，並針對這 3 檔標的（主要標的 + 2 檔比較標的）進行一次**綜合比較分析**。
+4. **格式要求：**
+    * 第一部分：必須以【📊...】、【💰...】、【📈...】、【⚠️...】、【💡...】的結構輸出主要標的的分析報告。
+    * 第二部分：必須在第一部分結束後，獨立標註 **【🆚 競爭標的綜合比較】** 作為標題。內容需包含一張表格，比較 3 檔標的的類型、規模、費用率、近一年績效和風險（如果可能）。
 請使用繁體中文。
 免責聲明：本分析僅供參考，不代表投資建議，投資前請審慎評估。
-"""
+""
 
 # 嘗試從 Streamlit Secrets 讀取密鑰並初始化 Gemini 客戶端
 # --- 讀取密鑰並初始化 Gemini 客戶端 (請從這裡開始替換，替換到 st.set_page_config 之前) ---
@@ -77,23 +80,19 @@ if st.button("📈 開始分析") and stock_code:
         if data.empty:
             st.warning(f"⚠️ 無法取得 {stock_code_yf} 的歷史股價，可能代號有誤或資料不完整。")
             st.stop()
-            
+                    
         # 4. GEMINI ANALYSIS 
-        with st.spinner(f"AI 顧問正在分析 {stock_code_yf} ..."):
+        with st.spinner(f"AI 顧問正在分析 {stock_code_yf} 並尋找競爭標的..."):
             # 傳遞給 Gemini 的提示詞
-            # Prepare the prompt for Gemini
-            current_price = float(data['Close'].iloc[-1])
-            prompt = f"請詳細分析台股代號 {stock_code_yf}。當前最新收盤價是 {current_price:.2f}。所有分析務必以此價格為唯一基準進行評估。請遵循我們設定好的格式。"
+            current_price = float(data['Close'].iloc[-1]) 
+            prompt = f"請詳細分析台股代號 {stock_code_yf}。當前最新收盤價是 {current_price:.2f}。所有分析務必以此價格為唯一基準進行評估。請遵循我們設定好的格式，並執行比較任務。"
             
-            # 發送請求
+            # 發送請求 - AI 會在這次呼叫中完成主要分析和比較兩項任務
             response = client.generate_content(prompt)
             
-            # 顯示 AI 分析報告
-            st.subheader(f"AI 分析報告 - {stock_code_yf}")
-            st.markdown(response.text) 
-            
-    except Exception as e:
-        st.error(f"分析時發生錯誤：請檢查代號是否正確。詳細錯誤: {e}")
+            # 顯示 AI 分析報告（包含報告和比較兩部分）
+            st.subheader(f"AI 深度分析 - {stock_code_yf}")
+            st.markdown(response.text)
         
 # 5. CHART DISPLAY (約在 Line 91)
 # 修正後的安全檢查語法：確保 data 存在且不為空
