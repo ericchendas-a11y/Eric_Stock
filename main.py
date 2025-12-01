@@ -70,10 +70,13 @@ if st.button("📈 開始分析") and stock_code:
         # 確保 'Close' 是浮點數，用於計算
         price_data = data['Close'].astype(float)
         
+        # <<< 修正：將 Pandas Series 轉換為 NumPy array 或 list，以避免格式化錯誤 >>>
+        price_values = price_data.to_numpy() # 轉換為 NumPy array
+        
         # 計算統計數據
-        max_price = round(price_data.max(), 2) # <<< 修正：使用 round() 強制轉換為純 Python float
-        min_price = round(price_data.min(), 2) # <<< 修正：使用 round() 強制轉換為純 Python float
-        avg_price = round(price_data.mean(), 2) # <<< 修正：使用 round() 強制轉換為純 Python float
+        max_price = round(price_values.max(), 2) 
+        min_price = round(price_values.min(), 2) 
+        avg_price = round(price_values.mean(), 2) 
 
         st.markdown("---")
         st.subheader("🗓 近一年股價走勢與統計")
