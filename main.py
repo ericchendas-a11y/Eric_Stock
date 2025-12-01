@@ -25,10 +25,21 @@ except KeyError:
 
 # --- 1. CONFIGURATION AND INITIALIZATION ---
 
-    # 設置 Streamlit 網頁標題與排版
-st.set_page_config(page_title="台股 AI 投資儀表板", layout="wide")
-st.title("📊 台股 AI 投資顧問")
-st.caption("輸入台股代號 (例如：2330, 0050) 進行分析與歷史走勢圖查看。")
+# ... (程式碼在 Line 27-28 的 except 區塊結束)
+except Exception as e:
+    # 這裡必須縮排
+    st.error(f"❌ Gemini 初始化失敗，請檢查 API Key 或模型名稱: {e}")
+    st.stop() 
+
+# ----------------------------------------------------
+# 以下程式碼必須是零縮排，靠左對齊！
+# ----------------------------------------------------
+
+st.set_page_config(page_title="台股 AI 投資儀表板", layout="wide") # <<< Line 29: 必須靠最左邊
+st.title("📊 台股 AI 投資顧問")                                 # 必須靠最左邊
+st.caption("輸入台股代號 (例如：2330, 0050) 進行分析與歷史走勢圖查看。") # 必須靠最左邊
+
+# ... (後續的 if st.button 判斷式也必須靠最左邊)
 
 # System Instruction (AI 的大腦/人設)
 SYSTEM_PROMPT = """你是一位專業、客觀且數據導向的「台股投資分析助理」。你的任務是協助使用者快速分析台灣上市櫃股票與 ETF。
