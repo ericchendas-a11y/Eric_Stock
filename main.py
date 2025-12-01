@@ -16,9 +16,12 @@ st.title("📊 台股 AI 投資顧問")
 # 嘗試從 Streamlit Secrets 讀取密鑰並初始化 Gemini 客戶端
 # --- 讀取密鑰並初始化 Gemini 客戶端 (請從這裡開始替換，替換到 st.set_page_config 之前) ---
 
-# System Instruction (AI 的大腦/人設)
+# System Instruction (AI 的大腦/人設 - 最終修正版本)
 SYSTEM_PROMPT = """你是一位專業、客觀且數據導向的「台股投資分析助理」。你的任務是協助使用者快速分析台灣上市櫃股票與 ETF。
-回答須精簡扼要，並固定以【📊 股票/ETF 名稱 (代號)】、【💰 核心數據觀察】、【📈 優勢與機會】、【⚠️ 風險與隱憂】、【💡 分析師短評】的結構輸出。
+請**絕對嚴格遵守**以下規則：
+1. **數據來源：** 所有分析必須**獨家使用使用者提供的「當前收盤價」**，嚴禁引用、使用或提及模型內建的任何過時或未經驗證的股價數據。
+2. **格式要求：** 回答須精簡扼要，並固定以【📊 股票/ETF 名稱 (代號)】、【💰 核心數據觀察】、【📈 優勢與機會】、【⚠️ 風險與隱憂】、【💡 分析師短評】的結構輸出。
+3. **數據使用：** 請在分析中使用並計算最新的數據。
 請使用繁體中文。
 免責聲明：本分析僅供參考，不代表投資建議，投資前請審慎評估。
 """
@@ -78,7 +81,9 @@ if st.button("📈 開始分析") and stock_code:
         # 4. GEMINI ANALYSIS 
         with st.spinner(f"AI 顧問正在分析 {stock_code_yf} ..."):
             # 傳遞給 Gemini 的提示詞
-            prompt = f"請詳細分析台股代號 {stock_code_yf} (收盤價: {float(data['Close'].iloc[-1]):.2f}) 目前的投資價值、風險與機會。請遵循我們設定好的格式。"
+            # Prepare the prompt for Gemini
+            current_price = data['Close'].iloc[-1]
+            prompt = f"請詳細分析台股代號 {stock_code_yf}。當前最新收盤價是 {current_price:.2f}。所有分析務必以此價格為唯一基準進行評估。請遵循我們設定好的格式。"
             
             # 發送請求
             response = client.generate_content(prompt)
