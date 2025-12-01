@@ -59,20 +59,17 @@ if st.button("📈 開始分析") and stock_code:
     
     # 3. STOCK DATA RETRIEVAL (yfinance)
     try:
-        # 下載近六個月的股價資料
         # Fetch data for charting (last 6 months)
         data = yf.download(stock_code_yf, period="6mo", progress=False)
-        
-        # 1. 將日期索引轉換為欄位
-        data = data.reset_index()
-        
-        # <<< 2. 新增此行：強制將日期欄位名稱設為 'Date' (這是關鍵!) >>>
-        data.rename(columns={'index': 'Date'}, inplace=True)
-        data.rename(columns={'Date': 'Date'}, inplace=True) # 確保名稱是 'Date' 而不是 level_0
+
+        # 檢查並處理數據 (修正 KeyError 的關鍵)
+        if not data.empty:
+            # 將日期索引明確轉換為 'Date' 欄位，確保 Streamlit 辨識
+            data = data.reset_index()
+            data.rename(columns={'Date': 'Date'}, inplace=True) # 再次確認欄位名稱為 'Date'
         
         if data.empty:
-            # ...
-            st.warning(f"⚠️ 無法取得 {stock_code_yf} 的歷史股價，請檢查代號是否正確。")
+            st.warning(f"⚠️ 無法取得 {stock_code_yf} 的歷史股價，可能代號有誤或資料不完整。")
             st.stop()
             
         # 4. GEMINI ANALYSIS 
@@ -90,12 +87,11 @@ if st.button("📈 開始分析") and stock_code:
     except Exception as e:
         st.error(f"分析時發生錯誤：請檢查代號是否正確。詳細錯誤: {e}")
         
-# ...
-    # 5. CHART DISPLAY (約在 Line 92 左右)
+# 5. CHART DISPLAY (約在 Line 92 左右)
     if not data.empty:
         st.subheader("🗓 近六個月股價走勢")
-        
-        # 這是最終正確的繪圖語法：指定 X 軸為 'Date'，Y 軸為 'Close'
+    # 使用修正後的 x='Date' 和 y='Close'
+    st.line_chart(data, x='Date', y='Close')'，Y 軸為 'Close'
         st.line_chart(data, x='Date', y='Close')
 # 頁腳
 st.sidebar.markdown("---")
