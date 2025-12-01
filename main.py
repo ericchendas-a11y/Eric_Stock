@@ -92,9 +92,9 @@ if st.button("📈 開始分析") and stock_code:
         
 # 5. CHART DISPLAY (約在 Line 91)
 # 修正後的安全檢查語法：確保 data 存在且不為空
-if data is not None and not data.empty:
-    st.subheader("🗓 近六個月股價走勢")
-    st.line_chart(data, x='Date', y='Close')
+#if data is not None and not data.empty:
+#   st.subheader("🗓 近六個月股價走勢")
+#   st.line_chart(data, x='Date', y='Close')
 # 頁腳
 st.sidebar.markdown("---")
 st.sidebar.caption(f"部署於 Streamlit Cloud | 由 Gemini API 提供支援")
