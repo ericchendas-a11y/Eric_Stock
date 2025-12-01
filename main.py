@@ -81,9 +81,14 @@ if st.button("📈 開始分析") and stock_code:
     except Exception as e:
         st.error(f"分析時發生錯誤：請檢查代號是否正確。詳細錯誤: {e}")
         
+# ...
     # 5. CHART DISPLAY
     if not data.empty:
         st.subheader("🗓 近六個月股價走勢")
+        
+        # <<< 請新增這行，讓它顯示原始數據 >>>
+        st.dataframe(data) 
+        
         st.line_chart(data['Close'])
 
 # 頁腳
