@@ -26,7 +26,7 @@ except KeyError:
 # --- 1. CONFIGURATION AND INITIALIZATION ---
 
 # ... (程式碼在 Line 27-28 的 except 區塊結束)
-except Exception as e:
+    except Exception as e:
     # 這裡必須縮排
     st.error(f"❌ Gemini 初始化失敗，請檢查 API Key 或模型名稱: {e}")
     st.stop() 
