@@ -99,6 +99,6 @@ if st.button("📈 開始分析") and stock_code:
 #if data is not None and not data.empty:
 #   st.subheader("🗓 近六個月股價走勢")
 #   st.line_chart(data, x='Date', y='Close')
-# 頁腳
-st.sidebar.markdown("---")
-st.sidebar.caption(f"部署於 Streamlit Cloud | 由 Gemini API 提供支援")
+# 這是頁腳區塊 (Footer)
+st.sidebar.markdown("---") # <<< 這裡必須是零縮排！
+st.sidebar.caption(f"部署於 Streamlit Cloud | 由 Gemini API 提供支援") # <<< 這裡必須是零縮排！
